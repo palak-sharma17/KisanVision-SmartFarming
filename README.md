@@ -1,64 +1,66 @@
 # KisanVision-SmartFarming
 AI Powered Smart Farming &amp; Crop Disease Detection Platform using FastAPI, Computer Vision, Weather Intelligence, and Smart Farming Analytics.
-# KisanVision AI
 
-## AI Powered Smart Farming & Crop Intelligence Platform
+## AI-Powered Smart Farming & Crop Intelligence Platform
 
-KisanVision AI is a modern agriculture technology platform designed to help farmers detect crop diseases, monitor crop health, and improve farming productivity using Artificial Intelligence and Smart Farming technologies.
-
----
-
-# Features
-
-## Current Features
-
-- Crop Disease Detection
-- AI Prediction System
-- Image Upload Support
-- Smart Treatment Recommendation
-- Modern Farmer-Friendly UI
-- FastAPI Backend
-- Responsive Landing Page
+KisanVision AI is an advanced AgriTech platform designed to assist farmers using Artificial Intelligence, Computer Vision, and Smart Farming technologies. The platform helps detect crop diseases, provide treatment recommendations, and improve agricultural productivity through intelligent farming solutions.
 
 ---
 
-#  Upcoming Features
+#  Key Features
 
-- Weather Forecast System
-- Fertilizer Recommendation Engine
-- Smart Irrigation Suggestions
-- Market Price Tracker
+##  Crop Disease Detection
+- Upload crop images
+- AI-based disease prediction
+- Confidence score analysis
+- Instant treatment recommendations
+
+##  Smart Farming Intelligence
+- Weather forecasting integration
+- Irrigation recommendations
+- Fertilizer suggestions
+- Crop health monitoring
+
+##  Farmer Dashboard
+- Prediction history
+- Crop analytics
+- Smart insights
+- Farming activity tracking
+
+##  Future Enhancements
+- Multilingual Support (Hindi & English)
 - AI Farming Assistant Chatbot
-- Hindi & English Language Support
-- Farmer Dashboard
-- Crop Yield Prediction
-- Real TensorFlow AI Model
-- Mobile App Version
+- Market Price Tracking
+- IoT Smart Farming Integration
+- Mobile Application Support
 
 ---
 
 #  Tech Stack
 
 ## Frontend
-- HTML
-- CSS
+- HTML5
+- CSS3
 - JavaScript
 
 ## Backend
 - FastAPI
 - Python
 
-## AI/ML
+## Artificial Intelligence
 - TensorFlow
 - MobileNetV2
-- NumPy
+- Computer Vision
+
+## Database
+- SQLite
 
 ---
 
 #  Project Structure
 
 ```bash
-kisanvision-ai/
+KisanVision-AI/
 │
 ├── app.py
 ├── predict.py
@@ -73,14 +75,15 @@ kisanvision-ai/
 │
 ├── dataset/
 ├── models/
-└── venv/
+├── requirements.txt
+└── README.md
 ```
 
 ---
 
-#  Installation
+#  Installation & Setup
 
-## Clone Repository
+## 1️1 Clone Repository
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/KisanVision-AI.git
@@ -88,7 +91,7 @@ git clone https://github.com/YOUR_USERNAME/KisanVision-AI.git
 
 ---
 
-## Open Project
+## 2️2  Navigate to Project
 
 ```bash
 cd KisanVision-AI
@@ -96,7 +99,7 @@ cd KisanVision-AI
 
 ---
 
-## Create Virtual Environment
+## 3️3 Create Virtual Environment
 
 ```bash
 python3 -m venv venv
@@ -104,9 +107,9 @@ python3 -m venv venv
 
 ---
 
-## Activate Virtual Environment
+## 4️ 4 Activate Virtual Environment
 
-### Linux / Mac
+### Linux / macOS
 
 ```bash
 source venv/bin/activate
@@ -120,7 +123,7 @@ venv\\Scripts\\activate
 
 ---
 
-## Install Dependencies
+## 5️ Install Dependencies
 
 ```bash
 pip install fastapi uvicorn python-multipart jinja2
@@ -128,13 +131,13 @@ pip install fastapi uvicorn python-multipart jinja2
 
 ---
 
-# Run Project
+# Run Application
 
 ```bash
 python -m uvicorn app:app --reload
 ```
 
-Open browser:
+Open in browser:
 
 ```text
 http://127.0.0.1:8000
@@ -142,55 +145,52 @@ http://127.0.0.1:8000
 
 ---
 
-# AI Model
+#  AI Model
 
-The project uses:
-- MobileNetV2
+The platform is designed to use:
 - Transfer Learning
-- TensorFlow
+- MobileNetV2
+- TensorFlow-based image classification
 
-for crop disease classification.
-
----
-
-# 📸 Screenshots
-
-## Landing Page
-(Add Screenshot Here)
-
-## Prediction Result
-(Add Screenshot Here)
+for intelligent crop disease prediction.
 
 ---
 
-#  Future Scope
+#  Application Preview
 
-- Drone-based crop monitoring
-- Satellite farming analytics
-- Voice-controlled farmer assistant
+##  Landing Page
+(Add Screenshot Here)
+
+##  Disease Detection Result
+(Add Screenshot Here)
+
+---
+
+# Future Scope
+
+- Real-time satellite crop analysis
+- Drone-based farm monitoring
+- Voice-enabled farming assistant
 - Offline AI predictions
 - Government scheme integration
-- IoT Smart Farming Sensors
+- Smart sensor connectivity
 
 ---
 
-# Contribution
+#  Contribution
 
 Contributions are welcome.
 
-Fork the repository and improve KisanVision AI 
+Feel free to fork the repository and improve the platform.
 
 ---
 
-#  Developer
+# Developed By
 
 ## Palak Sharma
 
-B.Tech CSE Student  
-AI & Full Stack Developer
+B.Tech Computer Science Engineering Student  
+AI & Full Stack Development Enthusiast
 
 ---
 
-#  Support
-
-If you like this project, give it a on GitHub.
