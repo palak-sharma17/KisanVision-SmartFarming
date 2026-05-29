@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KisanVision AI - Smart Farming Platform</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --soil: #1a1209;
+            --earth: #2d1f0a;
+            --bark: #3d2b0f;
+            --clay: #5c3d1a;
+            --amber: #c8751a;
+            --gold: #e8a830;
+            --straw: #f2d280;
+            --cream: #fdf6e3;
+            --leaf: #2d6a2d;
+            --moss: #4a7c4a;
+            --sage: #7aab6a;
+            --mist: #b8d4a8;
+            --sky: #3a6b8a;
+            --dew: #8ec4d8;
+            --danger: #c0392b;
+            --danger-light: #f9e0de;
+            --success: #1e7e34;
+            --success-light: #d4edda;
+            --border: rgba(200, 117, 26, 0.2);
+            --border-strong: rgba(200, 117, 26, 0.4);
+            --font-display: 'DM Serif Display', serif;
+            --font-body: 'Sora', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--soil);
+            color: var(--cream);
+            min-height: 100vh;
+            background-image:
+                radial-gradient(ellipse 80% 40% at 50% 0%, rgba(200,117,26,0.08) 0%, transparent 70%),
+                repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.01) 40px, rgba(255,255,255,0.01) 41px),
+                repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.01) 40px, rgba(255,255,255,0.01) 41px);
+        }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2.5rem;
+            height: 64px;
+            background: rgba(26,18,9,0.95);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            color: var(--gold);
+            letter-spacing: 0.01em;
+        }
+
+        .logo i { color: var(--sage); font-size: 1.2rem; }
+
+        .logo span em {
+            font-style: italic;
+            color: var(--straw);
+            font-size: 0.85em;
+        }
+
+        .nav-right { display: flex; align-items: center; gap: 1rem; }
+
+        .nav-tag {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--amber);
+            background: rgba(200,117,26,0.12);
+            border: 1px solid var(--border-strong);
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        .lang-toggle {
+            font-size: 0.75rem;
+            color: rgba(253,246,227,0.5);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .lang-toggle span { color: var(--cream); font-weight: 500; }
+
+        /* ── HERO STRIP ── */
+        .hero-strip {
+            padding: 2.5rem 2.5rem 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.1;
+            color: var(--cream);
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .hero-sub {
+            font-size: 0.8rem;
+            color: rgba(253,246,227,0.45);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-family: var(--font-mono);
+            margin-top: 0.5rem;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--sage);
+            padding: 6px 12px;
+            background: rgba(45,106,45,0.12);
+            border: 1px solid rgba(122,171,106,0.25);
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .system-status::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--sage);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* ── METRICS ROW ── */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            margin: 2rem 2.5rem 0;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .metric-card {
+            background: var(--earth);
+            padding: 1.4rem 1.6rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: background 0.2s;
+        }
+
+        .metric-card:hover { background: var(--bark); }
+
+        .metric-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .icon-amber { background: rgba(200,117,26,0.18); color: var(--gold); }
+        .icon-sky   { background: rgba(58,107,138,0.22); color: var(--dew); }
+        .icon-leaf  { background: rgba(45,106,45,0.22); color: var(--sage); }
+
+        .metric-body { flex: 1; }
+
+        .metric-value {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--cream);
+            line-height: 1;
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            color: rgba(253,246,227,0.45);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 4px;
+        }
+
+        .metric-sub {
+            font-size: 0.7rem;
+            color: var(--amber);
+            margin-top: 6px;
+            font-family: var(--font-mono);
+        }
+
+        /* ── MAIN WORKSPACE ── */
+        .workspace {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            padding: 1.5rem 2.5rem;
+        }
+
+        .panel {
+            background: var(--earth);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-header i { color: var(--amber); font-size: 0.95rem; }
+
+        .panel-header h2 {
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--straw);
+        }
+
+        .panel-body { padding: 1.5rem; }
+
+        /* ── UPLOAD ZONE ── */
+        .upload-subtitle {
+            font-size: 0.78rem;
+            color: rgba(253,246,227,0.45);
+            margin-bottom: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .drop-zone {
+            border: 1.5px dashed var(--border-strong);
+            border-radius: 10px;
+            padding: 2rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: var(--amber);
+            background: rgba(200,117,26,0.06);
+        }
+
+        .drop-icon {
+            font-size: 2rem;
+            color: var(--clay);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .drop-zone p {
+            font-size: 0.8rem;
+            color: rgba(253,246,227,0.45);
+        }
+
+        .drop-zone p span {
+            color: var(--amber);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .preview-container {
+            margin-top: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            display: none;
+        }
+
+        .preview-container.visible { display: block; }
+
+        .preview-container img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .btn-run {
+            width: 100%;
+            margin-top: 1.25rem;
+            padding: 0.85rem;
+            background: var(--amber);
+            color: var(--soil);
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-run:hover:not(:disabled) {
+            background: var(--gold);
+            transform: translateY(-1px);
+        }
+
+        .btn-run:disabled {
+            background: var(--clay);
+            color: rgba(253,246,227,0.3);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ── RESULTS PANEL ── */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1rem;
+            text-align: center;
+            gap: 0.75rem;
+        }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            color: var(--clay);
+        }
+
+        .empty-state h3 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            color: rgba(253,246,227,0.4);
+        }
+
+        .empty-state p {
+            font-size: 0.75rem;
+            color: rgba(253,246,227,0.25);
+            max-width: 240px;
+            line-height: 1.7;
+        }
+
+        /* ── LOADER ── */
+        .loader {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 3rem 1rem;
+            gap: 1.25rem;
+        }
+
+        .loader.active { display: flex; }
+
+        .spinner-ring {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--border);
+            border-top-color: var(--amber);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loader p {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: rgba(253,246,227,0.4);
+            text-align: center;
+            letter-spacing: 0.04em;
+        }
+
+        /* ── ANALYSIS RESULTS ── */
+        .analysis-results { display: none; }
+        .analysis-results.visible { display: block; }
+
+        .result-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .result-crop {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            color: var(--cream);
+            line-height: 1.2;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .badge-healthy {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .badge-diseased {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        .confidence-bar {
+            margin-bottom: 1.25rem;
+        }
+
+        .confidence-label {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: rgba(253,246,227,0.4);
+            letter-spacing: 0.06em;
+            margin-bottom: 6px;
+        }
+
+        .confidence-track {
+            height: 4px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: var(--amber);
+            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            width: 0%;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 1rem 0;
+        }
+
+        .insight-block {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(200,117,26,0.08);
+        }
+
+        .insight-block:last-child { border-bottom: none; }
+
+        .insight-label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.65rem;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--amber);
+            margin-bottom: 0.5rem;
+        }
+
+        .insight-text {
+            font-size: 0.8rem;
+            color: rgba(253,246,227,0.7);
+            line-height: 1.7;
+        }
+
+        /* ── HISTORY TABLE ── */
+        .history-section {
+            padding: 0 2.5rem 2.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-family: var(--font-mono);
+            color: rgba(253,246,227,0.4);
+        }
+
+        .section-title i { color: var(--amber); }
+
+        .record-count {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--amber);
+            background: rgba(200,117,26,0.1);
+            border: 1px solid var(--border);
+            padding: 3px 10px;
+            border-radius: 4px;
+        }
+
+        .history-table-wrap {
+            background: var(--earth);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead tr {
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            padding: 0.75rem 1.25rem;
+            text-align: left;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(253,246,227,0.3);
+            font-weight: 400;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(200,117,26,0.06);
+            transition: background 0.15s;
+        }
+
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+        td {
+            padding: 0.85rem 1.25rem;
+            font-size: 0.78rem;
+            color: rgba(253,246,227,0.65);
+            font-family: var(--font-mono);
+        }
+
+        td:nth-child(2) {
+            color: var(--straw);
+            font-weight: 500;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-family: var(--font-mono);
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .pill-danger { background: rgba(192,57,43,0.15); color: #e57373; }
+        .pill-success { background: rgba(30,126,52,0.15); color: #81c784; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .workspace { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: 1fr; }
+            .hero-strip { flex-direction: column; align-items: flex-start; }
+            .navbar { padding: 0 1.25rem; }
+            .workspace, .history-section { padding-left: 1.25rem; padding-right: 1.25rem; }
+            .hero-strip { padding: 1.5rem 1.25rem 0; }
+            .metrics-grid { margin-left: 1.25rem; margin-right: 1.25rem; }
+        }
+
+        .hidden { display: none !important; }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .panel { animation: fadeSlideUp 0.5s ease both; }
+        .panel:nth-child(2) { animation-delay: 0.08s; }
+        .metric-card:nth-child(2) { animation-delay: 0.05s; }
+        .metric-card:nth-child(3) { animation-delay: 0.1s; }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-seedling"></i>
+            <span>KisanVision <em>AI</em></span>
+        </div>
+        <div class="nav-right">
+            <span class="nav-tag">MobileNetV2 Engine</span>
+            <span class="lang-toggle"><i class="fa-solid fa-globe" style="font-size:0.75rem"></i> EN | <span>हिन्दी</span></span>
+        </div>
+    </header>
+
+    <div class="hero-strip">
+        <div>
+            <h1 class="hero-title">Crop Disease<br><em>Intelligence</em></h1>
+            <p class="hero-sub">Real-time pathogen detection · Smart irrigation · Yield protection</p>
+        </div>
+        <div class="system-status">AI Model Operational · Rajasthan Region</div>
+    </div>
+
+    <!-- METRICS -->
+    <section class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-icon icon-amber"><i class="fa-solid fa-temperature-half"></i></div>
+            <div class="metric-body">
+                <div class="metric-value">{{ weather.temp }}</div>
+                <div class="metric-label">Ambient Temperature</div>
+                <div class="metric-sub">{{ weather.condition }} · {{ weather.location }}</div>
+            </div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-icon icon-sky"><i class="fa-solid fa-droplet"></i></div>
+            <div class="metric-body">
+                <div class="metric-value">{{ weather.humidity }}</div>
+                <div class="metric-label">Soil Moisture Index</div>
+                <div class="metric-sub">Drip Active · Next cycle 06:00</div>
+            </div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-icon icon-leaf"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="metric-body">
+                <div class="metric-value" id="scan-count">{{ history_count }}</div>
+                <div class="metric-label">Total Diagnoses Run</div>
+                <div class="metric-sub">Active Health Tracking</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WORKSPACE -->
+    <div class="workspace">
+
+        <!-- UPLOAD PANEL -->
+        <div class="panel">
+            <div class="panel-header">
+                <i class="fa-solid fa-camera-retro"></i>
+                <h2>AI Crop Diagnosis</h2>
+            </div>
+            <div class="panel-body">
+                <p class="upload-subtitle">Upload a close-up photo of crop leaves. The neural engine analyzes structural anomalies, pigmentation patterns, and lesion morphology.</p>
+
+                <form id="upload-form" enctype="multipart/form-data">
+                    <div class="drop-zone" id="drop-zone">
+                        <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+                        <p>Drag & drop image here or <span>browse files</span></p>
+                        <input type="file" id="file-input" name="file" accept="image/*" required hidden>
+                    </div>
+
+                    <div class="preview-container" id="preview-container">
+                        <img id="file-preview" src="#" alt="Crop image preview">
+                    </div>
+
+                    <button type="submit" class="btn-run" id="submit-btn" disabled>
+                        <i class="fa-solid fa-microscope"></i> Run Diagnosis
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- RESULTS PANEL -->
+        <div class="panel">
+            <div class="panel-header">
+                <i class="fa-solid fa-flask-vial"></i>
+                <h2>Diagnostic Report</h2>
+            </div>
+            <div class="panel-body">
+
+                <div class="empty-state" id="empty-state">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <h3>Awaiting Sample</h3>
+                    <p>Submit a crop image to generate treatment insights, fertilizer ratios, and irrigation metrics.</p>
+                </div>
+
+                <div class="loader" id="loader">
+                    <div class="spinner-ring"></div>
+                    <p>Analyzing leaf structures with<br>MobileNetV2 Neural Engine…</p>
+                </div>
+
+                <div class="analysis-results" id="analysis-results">
+                    <div class="result-top">
+                        <div class="result-crop" id="res-title">—</div>
+                        <span class="status-badge" id="res-status"></span>
+                    </div>
+
+                    <div class="confidence-bar">
+                        <div class="confidence-label">
+                            <span>Confidence Index</span>
+                            <span id="res-confidence">0%</span>
+                        </div>
+                        <div class="confidence-track">
+                            <div class="confidence-fill" id="confidence-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="insight-block">
+                        <div class="insight-label">
+                            <i class="fa-solid fa-prescription-bottle-medical"></i> Treatment Plan
+                        </div>
+                        <p class="insight-text" id="res-treatment"></p>
+                    </div>
+
+                    <div class="insight-block">
+                        <div class="insight-label">
+                            <i class="fa-solid fa-flask"></i> Fertilizer Strategy
+                        </div>
+                        <p class="insight-text" id="res-fertilizer"></p>
+                    </div>
+
+                    <div class="insight-block">
+                        <div class="insight-label">
+                            <i class="fa-solid fa-faucet-drip"></i> Irrigation Protocol
+                        </div>
+                        <p class="insight-text" id="res-irrigation"></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- HISTORY TABLE -->
+    <section class="history-section">
+        <div class="section-header">
+            <div class="section-title">
+                <i class="fa-solid fa-clock-rotate-left"></i> Farm Activity Log
+            </div>
+            <span class="record-count" id="record-count">{{ history_count }} Records</span>
+        </div>
+
+        <div class="history-table-wrap">
+            <table id="history-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Crop</th>
+                        <th>Status</th>
+                        <th>Pathogen / Anomaly</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in history %}
+                    <tr>
+                        <td>{{ log.date }}</td>
+                        <td>{{ log.crop }}</td>
+                        <td>
+                            <span class="pill {{ 'pill-danger' if log.status == 'Diseased' else 'pill-success' }}">
+                                <i class="fa-solid {{ 'fa-circle-exclamation' if log.status == 'Diseased' else 'fa-circle-check' }}"></i>
+                                {{ log.status }}
+                            </span>
+                        </td>
+                        <td>{{ log.issue }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+<script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const previewContainer = document.getElementById('preview-container');
+    const filePreview = document.getElementById('file-preview');
+    const submitBtn = document.getElementById('submit-btn');
+    const uploadForm = document.getElementById('upload-form');
+    const emptyState = document.getElementById('empty-state');
+    const loader = document.getElementById('loader');
+    const resultsPanel = document.getElementById('analysis-results');
+
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', function() {
+        if (this.files[0]) showPreview(this.files[0]);
+    });
+
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length) {
+            fileInput.files = e.dataTransfer.files;
+            showPreview(e.dataTransfer.files[0]);
+        }
+    });
+
+    function showPreview(file) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            filePreview.src = e.target.result;
+            previewContainer.classList.add('visible');
+            submitBtn.disabled = false;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    uploadForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        emptyState.style.display = 'none';
+        resultsPanel.classList.remove('visible');
+        loader.classList.add('active');
+        submitBtn.disabled = true;
+
+        const formData = new FormData(this);
+
+        try {
+            const response = await fetch('/analyze', { method: 'POST', body: formData });
+            const data = await response.json();
+
+            loader.classList.remove('active');
+
+            if (data.error) {
+                alert('Analysis error: ' + data.error);
+                emptyState.style.display = 'flex';
+            } else {
+                document.getElementById('res-title').textContent = data.crop_disease;
+                document.getElementById('res-confidence').textContent = data.confidence + '%';
+                document.getElementById('res-treatment').textContent = data.treatment;
+                document.getElementById('res-fertilizer').textContent = data.fertilizer;
+                document.getElementById('res-irrigation').textContent = data.irrigation;
+
+                const statusEl = document.getElementById('res-status');
+                statusEl.textContent = data.status;
+                statusEl.className = 'status-badge ' + (data.status === 'Healthy' ? 'badge-healthy' : 'badge-diseased');
+
+                const fill = document.getElementById('confidence-fill');
+                fill.style.width = '0%';
+                fill.style.background = data.status === 'Healthy' ? '#4caf50' : '#e57373';
+                setTimeout(() => { fill.style.width = data.confidence + '%'; }, 50);
+
+                resultsPanel.classList.add('visible');
+
+                const tbody = document.querySelector('#history-table tbody');
+                const cropType = data.crop_disease.split(' - ')[0];
+                const issueType = data.crop_disease.includes(' - ') ? data.crop_disease.split(' - ')[1] : 'None';
+                const isHealthy = data.status === 'Healthy';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${new Date().toISOString().split('T')[0]}</td>
+                    <td>${cropType}</td>
+                    <td><span class="pill ${isHealthy ? 'pill-success' : 'pill-danger'}">
+                        <i class="fa-solid ${isHealthy ? 'fa-circle-check' : 'fa-circle-exclamation'}"></i>
+                        ${data.status}
+                    </span></td>
+                    <td>${issueType}</td>
+                `;
+                tbody.insertBefore(row, tbody.firstChild);
+
+                const countEl = document.getElementById('scan-count');
+                countEl.textContent = parseInt(countEl.textContent) + 1;
+                document.getElementById('record-count').textContent =
+                    (parseInt(countEl.textContent)) + ' Records';
+            }
+        } catch (err) {
+            loader.classList.remove('active');
+            emptyState.style.display = 'flex';
+            alert('Network error or backend unavailable.');
+        } finally {
+            submitBtn.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>
